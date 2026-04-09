@@ -1,0 +1,32 @@
+services:
+
+
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    networks:
+      - secure_api_bank
+
+
+
+  notification-service:
+    build: ./
+    container_name: notification_service
+    ports:
+      - "3001:8081"
+    depends_on:
+      - rabbitmq
+    networks:
+      - secure_api_bank
+
+
+networks:
+  secure_api_bank:
+    driver: bridge
